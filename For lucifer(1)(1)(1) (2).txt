@@ -1,0 +1,172 @@
+--============ | AUTOSEND BOT  | ===============
+local NamaBotWebhok   = "Bot" -- Name bot webhoook (optional)
+local ColorBotWebhook = "#3C0753" -- Color Hex
+local Banner          = "https://cdn.discordapp.com/attachments/1249293514043424829/1251850404581609553/standard6.gif?ex=6670140a&is=666ec28a&hm=bb3d8b96619cab8ead7bc789f8f990adf844dfc18b417b6063d3bb1c94bd81b6&"
+--========== | Setting Status Bot | ===================
+local StatusWebhook   = true -- If true bot use webhook status
+local MessageId       = "MessageID" -- MessageID Webhook Status
+local WebhookStatus   = "Webhook" -- Webhook For Status Information
+--========= | Setting Donation Log | ==================
+local VendingSistem   = true -- You can true and false
+local World           = "ur world" -- Your world depo
+local webhookBal      = "Webhook" -- Webhook for donation log
+--============= | Setting Emoji | =====================
+local Crown   = "<a:cro:1251873772420726805>"
+local Vending = "<:Vendingm:1251873931002908733>"
+local WL      = "<:wl:1251861199013019689>"
+local Status  = "<:monitor:1251873929048489984>"
+local Clock   = "<:cloak:1251873891379576872>"
+local Globe   = "<a:globe:1251858926580793355>"
+local Online  = "<a:online:1227506503880278038>"
+local Offline = "<a:offline:1227506491855077386>"
+local DL      = "<a:dl:1251861601494106165>"
+local BGL     = "<a:bgl:1251861852388851812>"
+local Faq     = "<a:faq:1248608650445197366>"
+local Bot     = "<:botbot:1251858702512689315>"
+local Balance = "<a:balance:1200297073984143460>"
+--============= | DON'T TOUCH | =====================
+bot = getBot()
+function WorldTime()
+    Farm_Times = os.time() - Depo_Time
+    Days = tostring(math.floor(Farm_Times / 86400))
+    Hourw = tostring(math.floor(Farm_Times % 86400 / 3600))
+    Minutew = tostring(math.floor((Farm_Times % 86400 % 3600) / 60))
+    Secondw = tostring(math.floor((Farm_Times % 86400 % 3600) % 60))
+    Timew = tostring(Days.." Days "..Hourw.." Hours "..Minutew.." Minutes "..Secondw.." Seconds ")
+    return Timew
+end
+
+function pshell2(desc)
+	wh = Webhook.new(webhookBal)
+	wh.username = NamaBotWebhok
+	wh.embed1.use = true
+	wh.embed1.title = Crown .. " DONATION LOGS ".. Crown
+	wh.embed1.footer.text = os.date("!%d %B, %Y at %I:%M %p | Made By CURSE", os.time() + 7 * 60 * 60)
+	wh.embed1.description = desc
+	wh.embed1.color = ColorBotWebhook
+  	wh:send()
+end
+
+function pshell(desc)
+	wh = Webhook.new(webhookBal)
+  	wh.username = NamaBotWebhok
+  	wh.embed1.use = true
+  	wh.embed1.title = Vending .. " VENDING LOGS " .. Vending
+  	wh.embed1.footer.text = os.date("!%d %B, %Y at %I:%M %p | Made By CURSE", os.time() + 7 * 60 * 60)
+  	wh.embed1.description = desc
+  	wh.embed1.color = ColorBotWebhook
+  	wh:send()
+end
+
+function status(desc)
+	wh = Webhook.new(WebhookStatus)
+  	wh.username = NamaBotWebhok
+  	wh.embed1.use = true
+  	wh.embed1.title = Crown .. " STATUS INFORMATION " .. Crown
+  	wh.embed1.description = "**[" .. Clock .. "] Last Update: <t:" .. os.time() .. ":R> \n=============================**\n".. desc .."\n**=============================\n[".. Clock .."] Uptime:** ".. WorldTime() .."\n**=============================**"
+  	wh.embed1.color = ColorBotWebhook
+	wh.embed1.image = Banner
+  	wh:edit(MessageId)
+end
+
+addEvent(Event.variantlist, function(variant, netid)
+    if variant:get(0):getString() == "OnConsoleMessage" and variant:get(1):getString():find("bought") then
+        local message = variant:get(1):getString()
+		if VendingSistem then
+			if message:find("World Locks") and message:find("bought") then
+				if not (message:find("OID") or message:find("CP") or message:find("PL") or message:find("CT") or message:find("SB") or message:find("MSG") or message:find("BC")) then
+					player = message:gsub("`", ""):match("9(.+) bought")
+					jumlah = message:match("for (.+) World Locks")
+					item = message:match("bought (.+) for")
+					paymentType = "WorldLock " .. WL
+					bot:say("Thanks You!")
+					pshell2("**[".. Faq .."] BOUGHT: " .. item .. "\n[" .. Bot .. "] GrowID: " .. player .. " \n[" .. Balance .. "] Amount: " .. jumlah .. " " .. paymentType .. " **")
+				else
+					bot:say("Mau Ngapain Banh?!")
+				end
+			end
+		end
+	elseif variant:get(0):getString() == "OnConsoleMessage" and variant:get(1):getString():find("into the Donation Box") then
+        local message = variant:get(1):getString()
+		if message:find("into the Donation Box") and (message:find("World Lock") or message:find("Diamond Lock") or message:find("Blue Gem Lock")) then
+			if not (message:find("OID") or message:find("CP") or message:find("PL") or message:find("CT") or message:find("SB") or message:find("MSG") or message:find("BC")) then
+       			if message:find("World Lock") then
+					player = message:match("%[+%p+w+%w+"):sub(6)
+					jumlah = message:match("s+%s+%p+%d+"):sub(5)
+					paymentType = "WorldLock " .. WL
+				elseif message:find("Diamond Lock") then
+					player = message:match("%[+%p+w+%w+"):sub(6)
+					jumlah = message:match("s+%s+%p+%d+"):sub(5)
+					paymentType = "DiamondLock " .. DL
+				elseif message:find("Blue Gem Lock") then
+					player = message:match("%[+%p+w+%w+"):sub(6)
+					jumlah = message:match("s+%s+%p+%d+"):sub(5)
+					paymentType = "BlueGemLock " .. BGL
+        		end
+				bot:say("Balance Added!")
+				pshell2("**[" .. Bot .. "] GrowID: " .. player .. " \n[" .. Balance .. "] Amount: " .. jumlah .. " " .. paymentType .. " **")
+			else
+				bot:say("Mau Ngapain Banh?!")
+			end
+		end
+    end
+end)
+
+addEvent(Event.mod_enter, function()
+	if WebhookStatus then
+		status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Mod_Entered) ".. Offline .."**")
+	end
+end)
+
+function start()
+	pshell2("**SCRIPT STARTED**")
+	Depo_Time = os.time()
+	while true do
+		if bot.status == 1 then
+			if bot:isInWorld(World:upper()) then
+				if StatusWebhook then
+					status("**[".. Bot .."] Name: " .. getBot().name .. " [".. getBot().level .."] (".. bot:getPing() ..")\n[".. Status .."] Status: Online ".. Online .."\n=============================\n[".. Globe .."] World: ".. World .."\n[".. Balance .."]**")
+				end
+				listenEvents(30)
+			else
+				bot:warp(World:upper())
+				sleep(15000)
+			end
+		else
+			if StatusWebhook then
+				if bot.status == 0 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Offline) ".. Offline .."**")
+				elseif bot.status == 2 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Wrong_Password) ".. Offline .."**")
+				elseif bot.status == 3 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Account_Banned) ".. Offline .."**")
+				elseif bot.status == 4 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Location_Banned) ".. Offline .."**")
+				elseif bot.status == 5 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Version_Update) ".. Offline .."**")
+				elseif bot.status == 6 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(AAP) ".. Offline .."**")
+				elseif bot.status == 7 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Server_Overload) ".. Offline .."**")
+				elseif bot.status == 8 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(To_Many_Login) ".. Offline .."**")
+				elseif bot.status == 9 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Maintenance) ".. Offline .."**")
+				elseif bot.status == 10 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Server_Busy) ".. Offline .."**")
+				elseif bot.status == 12 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Http_Block) ".. Offline .."**")
+				elseif bot.status == 15 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Error_Connecting) ".. Offline .."**")
+				elseif bot.status == 16 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Login_Fail) ".. Offline .."**")
+				elseif bot.status == 18 then
+					status("**[".. Bot .."] Name: " .. getBot().name .. "\n[".. Status .."] Status: Offline(Mod_Entered) ".. Offline .."**")
+				end
+			end
+			bot:connect()
+			sleep(30000)
+		end
+	end
+end
+start()
